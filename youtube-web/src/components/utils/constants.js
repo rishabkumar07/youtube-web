@@ -1,0 +1,1 @@
+export const YOUTUBE_POPULAR_VIDEOS_LIST_API = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=40&regionCode=IN&key="+ process.env.GOOGLE_API_KEY;
