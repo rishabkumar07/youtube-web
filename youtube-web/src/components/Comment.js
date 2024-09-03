@@ -1,5 +1,6 @@
 import CommentReplies from "./CommentReplies";
 import { useState } from "react";
+import parse from 'html-react-parser';
 
 const Comment = ({data}) => {
   const { authorDisplayName, authorProfileImageUrl, textDisplay, likeCount, publishedAt } = data?.snippet?.topLevelComment?.snippet;
@@ -17,14 +18,15 @@ const Comment = ({data}) => {
         <div className="w-full">
           <div className="text-sm font-semibold text-gray-800">{authorDisplayName}</div>
           <div className="text-sm text-gray-600 mb-2">{new Date(publishedAt).toLocaleDateString()}</div>
-          <div className="text-sm text-gray-900">{textDisplay}</div>
+          <div className="text-sm text-gray-900">{parse(textDisplay)}</div>
           <div className="mt-2 flex items-center space-x-2 text-sm text-gray-600">
-            <span>{likeCount} likes</span>
+            <span className="text-gray-600 text-xl">👍</span>
+            <span className="mt-2">{likeCount}</span>
           </div>
         </div>
       </div>
         {data.replies && (
-          <div className="w-full mt-2">
+          <div className="w-full mt-2 ml-8">
             <button className="text-blue-500 mt-2" onClick={() => toggleReplies()}>
               { showCommentReplies ? '▲ Hide replies' : '▼ Show replies' }
             </button>
