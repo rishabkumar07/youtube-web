@@ -1,7 +1,53 @@
 import { toggleSideBarMenu } from "./utils/appSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { SEARCH_SUGGESTION_API } from "./utils/constants";
+import { addToSearchResultsCache } from "./utils/searchSlice";
+
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [showSearchSuggestion, setShowSearchSuggestion] = useState(false);
   const dispatch = useDispatch();
+  const searchResultsCache = useSelector((store) => store.search);
+
+  useEffect(() => {
+    if(!searchQuery)
+    {
+      setShowSearchSuggestion(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setShowSearchSuggestion(true);
+
+      if(searchResultsCache[searchQuery])
+        setSearchSuggestions(searchResultsCache[searchQuery]);
+      else
+        getSearchSuggestions();
+    }, 180);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const getSearchSuggestions = async () => {
+    try 
+    {
+      const response = await fetch(SEARCH_SUGGESTION_API + searchQuery);
+      const text = await response.text();
+      const json = JSON.parse(text.match(/\[(.*)\]/)[0]);
+      setSearchSuggestions(json[1]);
+
+      dispatch(addToSearchResultsCache({
+        [searchQuery] : json[1]
+      }));
+    } 
+    catch (error) 
+    {
+      console.error("Error fetching search suggestions:", error);
+    }
+  }
+
   const handleSideBarMenu = () => {
     dispatch(toggleSideBarMenu());
   }
@@ -17,8 +63,16 @@ const Header = () => {
       </div>
 
       <div className="col-span-9 px-10">
-      <input type="text" placeholder="Search" className="w-1/2 border border-gray-400 p-2 rounded-l-full"></input>
+      <input type="text" placeholder="Search" className="w-1/2 border border-gray-400 p-2 rounded-l-full"
+        value={searchQuery} onChange={(e) => setSearchQuery(e.target.value) }
+        onFocus={() => setShowSearchSuggestion(true) } 
+        onBlur={() => setShowSearchSuggestion(false) }></input>
       <button className="border border-gray-400 px-5 py-2 rounded-r-full bg-gray-100">🔍</button>
+      {showSearchSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
+        <ul>
+          {searchSuggestions.map((suggestion) => <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100">{suggestion}</li>)}
+        </ul>
+      </div> )}
       </div>
 
       <div className="col-span-1">
