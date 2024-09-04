@@ -76,7 +76,8 @@ const Header = () => {
         value={searchQuery} onChange={(e) => setSearchQuery(e.target.value) }
         onFocus={() => setShowSearchSuggestion(true) } 
         onBlur={() => setShowSearchSuggestion(false) }></input>
-      <button className="border border-gray-400 px-5 py-2 rounded-r-full bg-gray-100">🔍</button>
+      <button className="border border-gray-400 px-5 py-2 rounded-r-full bg-gray-100"
+        onClick={() => handleSuggestionClick(searchQuery)}>🔍</button>
       {showSearchSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
         <ul>
           {searchSuggestions.map((suggestion) => (
