@@ -1,6 +1,7 @@
 import { YT_SEARCH_API } from "./utils/constants";
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import parse from 'html-react-parser';
 
 const SearchResultsPage = () => {
   const [searchParams] = useSearchParams();
@@ -28,14 +29,22 @@ const SearchResultsPage = () => {
   return (
     <div className="p-5">
       {searchResults.map((video) => (
-        <div key={video.id.videoId} className="mb-4">
-          <Link to={`/watch?v=${video.id.videoId}`}>
-            <img src={video.snippet.thumbnails.medium.url} 
-              alt={video.snippet.title} className="w-full h-auto rounded-lg" />
-            <h3 className="text-lg font-semibold mt-2">{video.snippet.title}</h3>
-            <p className="text-sm text-gray-600">{video.snippet.channelTitle}</p>
-          </Link>
-        </div>
+        <Link to={`/watch?v=${video.id.videoId}`} key={video.id.videoId}>
+          <div className="flex items-start space-x-4 mb-6">
+            <div className="w-60 h-36 flex-shrink-0">
+              <img src={video.snippet.thumbnails.medium.url}
+                alt={video.snippet.title}  className="w-full h-full object-cover rounded-lg" />
+            </div>
+
+            <div className="flex-grow">
+              <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 hover:text-blue-500"> {parse(video.snippet.title)} </h3>
+              <div className="text-sm text-gray-600 mt-1"> 
+                {video.snippet.channelTitle} 
+              </div>
+              <p className="text-sm text-gray-700 mt-2 line-clamp-2"> {parse(video.snippet.description)} </p>
+            </div>
+          </div>
+        </Link>
       )
       )}
     </div>
