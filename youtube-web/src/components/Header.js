@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { SEARCH_SUGGESTION_API } from "./utils/constants";
 import { addToSearchResultsCache } from "./utils/searchSlice";
+import SearchResultsPage from "./SearchResultsPage";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -10,6 +12,7 @@ const Header = () => {
   const [showSearchSuggestion, setShowSearchSuggestion] = useState(false);
   const dispatch = useDispatch();
   const searchResultsCache = useSelector((store) => store.search);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(!searchQuery)
@@ -51,6 +54,12 @@ const Header = () => {
   const handleSideBarMenu = () => {
     dispatch(toggleSideBarMenu());
   }
+
+  const handleSuggestionClick = (suggestion) => {
+    setShowSearchSuggestion(false);
+    navigate(`/results?search_query=${suggestion}`);
+  }
+
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
       <div className="flex col-span-2">
@@ -70,7 +79,12 @@ const Header = () => {
       <button className="border border-gray-400 px-5 py-2 rounded-r-full bg-gray-100">🔍</button>
       {showSearchSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
         <ul>
-          {searchSuggestions.map((suggestion) => <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100">{suggestion}</li>)}
+          {searchSuggestions.map((suggestion) => (
+            <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100"
+              onMouseDown={() => handleSuggestionClick(suggestion)}>
+              {suggestion}
+            </li>
+          ))}
         </ul>
       </div> )}
       </div>
