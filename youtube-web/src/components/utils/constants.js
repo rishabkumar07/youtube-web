@@ -4,4 +4,6 @@ export const SEARCH_SUGGESTION_API = "https://thingproxy.freeboard.io/fetch/http
 
 export const YT_COMMENTS_THREADS_API = "https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=10&key=" + process.env.REACT_APP_GOOGLE_API_KEY;
 
-export const YT_SEARCH_API = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=25&key=" + process.env.REACT_APP_GOOGLE_API_KEY;
+export const YT_SEARCH_API = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&key=" + process.env.REACT_APP_GOOGLE_API_KEY;
+
+export const YT_VIDEO_DETAILS_API = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&key=" + process.env.REACT_APP_GOOGLE_API_KEY;

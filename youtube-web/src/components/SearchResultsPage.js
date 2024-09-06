@@ -1,12 +1,15 @@
 import { YT_SEARCH_API } from "./utils/constants";
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+//import { addCurrentVideo } from "./utils/homeSlice";
 import parse from 'html-react-parser';
+//import { useDispatch } from "react-redux";
 
 const SearchResultsPage = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("search_query");
   const [searchResults, setSearchResults] = useState([]);
+  //const dispatch = useDispatch();
 
   useEffect(() => {
     if(query)
@@ -16,7 +19,7 @@ const SearchResultsPage = () => {
   const fetchSearchResults = async() => {
     try
     {
-      const data = await fetch(`${YT_SEARCH_API}&q=${query}`);
+      const data = await fetch(`${YT_SEARCH_API}&maxResults=25&q=${query}`);
       const json = await data.json();
       setSearchResults(json.items);
     }
@@ -25,6 +28,11 @@ const SearchResultsPage = () => {
       console.error("Error fetching search results:", error);
     }
   }
+
+  /*const addVideoDetails = (video) => {
+    //fetch more details then add
+    dispatch(addCurrentVideo(video));
+  }*/
 
   return (
     <div className="p-5">

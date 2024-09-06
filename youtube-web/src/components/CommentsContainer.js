@@ -29,7 +29,7 @@ const CommentsContainer = ({videoId}) => {
 
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 p-4 bg-white rounded-lg shadow-lg">
       <h2 className="text-xl font-semibold mb-4">Comments</h2>
 
       <div>
@@ -43,7 +43,7 @@ const CommentsContainer = ({videoId}) => {
       {loading && <div>Loading comments...</div>}
       { nextPageToken && (
         <button
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={() => fetchComments(nextPageToken)}
           disabled={loading}>
           Load More Comments

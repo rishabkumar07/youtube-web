@@ -4,7 +4,7 @@ const CommentReplies = ({replies}) => {
   return (
     <div className="ml-12 mt-4">
       {replies.map((reply) => (
-        <div key={reply.id} className="flex items-start space-x-4 p-4 border-b border-gray-200">
+        <div key={reply.id} className="flex items-start space-x-4 p-4 border-b border-gray-200 bg-white rounded-lg shadow">
           <img className="w-10 h-10 rounded-full" src={reply.snippet.authorProfileImageUrl} alt="profile" />
           <div>
             <div className="text-sm font-semibold text-gray-800">{reply.snippet.authorDisplayName}</div>

@@ -11,7 +11,7 @@ const Comment = ({data}) => {
   }
 
   return (
-    <div className="flex flex-col items-start space-y-4 p-4 border-b border-gray-200">
+    <div className="flex flex-col items-start space-y-4 p-4 border-b border-gray-200 bg-white rounded-lg shadow">
       <div className="flex items-start space-x-4 w-full">
         <img  className="w-12 h-12 rounded-full" src={authorProfileImageUrl} alt="profile" />
         
