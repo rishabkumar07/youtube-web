@@ -7,7 +7,7 @@ const RecommendationVideo = ({ videoTitle, videoId }) => {
 
   useEffect(()=> {
     fetchRecommendedVideos();
-  },[]);
+  },[videoTitle, videoId]);
 
   const fetchRecommendedVideos = async() => {
     try {

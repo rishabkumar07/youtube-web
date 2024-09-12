@@ -44,13 +44,13 @@ const VideoWatchPage = () => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; autoplay"
             allowFullScreen>
           </iframe>
-          <CommentsContainer videoId = {videoKey}/>
+          <CommentsContainer key={videoKey} videoId = {videoKey}/>
         </div>
 
         <div className="flex flex-col w-1/3 ml-4">
           <LiveChat />
           { title ? (
-            <RecommendationVideo videoTitle={title} videoId={videoKey} /> )  : ( 
+            <RecommendationVideo key={videoKey} videoTitle={title} videoId={videoKey} /> )  : ( 
             <div>Loading recommendations...</div>
           )}
         </div>
