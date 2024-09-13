@@ -13,13 +13,13 @@ const VideoCard = ({videoDetails}) => {
   };
 
   return (
-    <div className="p-2 m-2 w-72 shadow-lg">
+    <div className="p-2 m-2 w-72 shadow-lg hover:shadow-xl transition-shadow duration-200 ease-in-out">
       <img src={thumbnails.medium.url} 
-        className="rounded-lg" alt="thumbnail"></img>
-       <ul>
-        <li className="font-bold py-2">{title}</li>
-        <li>{channelTitle}</li>
-        <li>{formatViews(statistics?.viewCount)} views</li>
+        className="rounded-lg w-full h-auto" alt="thumbnail"></img>
+       <ul className="mt-2">
+        <li className="font-bold text-sm line-clamp-2 py-1">{title}</li>
+        <li className="text-xs text-gray-500">{channelTitle}</li>
+        <li className="text-xs text-gray-500">{formatViews(statistics?.viewCount)} views</li>
       </ul>
     </div>
   )
