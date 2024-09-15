@@ -101,7 +101,7 @@ const VideoContainer = () => {
     }
     catch(error)
     {
-      console.error("Error fetching popular video list:", error);
+      console.error("Error fetching other categories video list:", error);
     }
     finally
     {
