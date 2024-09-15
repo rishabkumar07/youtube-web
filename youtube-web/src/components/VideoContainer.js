@@ -42,10 +42,10 @@ const VideoContainer = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
       { loading ? (
         Array.from({length : 16 }).map((_, index) => (
-          <div key={index} className="p-2 m-2 w-72 shadow-lg">
+          <div key={index} className="p-2 shadow-lg">
             <Skeleton height={180} className="rounded-lg" />
             <div className="mt-2">
               <Skeleton height={20} width="80%" />
