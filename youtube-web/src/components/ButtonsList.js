@@ -1,9 +1,13 @@
 import { useRef } from 'react';
 import { Scrollbar } from 'react-scrollbars-custom';
 import { SUGGESTIONS_LIST } from './utils/constants';
+import { useDispatch } from 'react-redux';
+import { addVideoCategoryId } from './utils/homeSlice';
 
 const ButtonsList = () => {
   const scrollRef = useRef(null);
+  const dispatch = useDispatch();
+  const suggestionsList = SUGGESTIONS_LIST.items;
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -17,7 +21,9 @@ const ButtonsList = () => {
     }
   };
 
-  const suggestionsList = SUGGESTIONS_LIST.items;
+  const handleSuggestionButtonClick = (id) => {
+    dispatch(addVideoCategoryId(parseInt(id)));
+  }
 
   return (
     <div className="flex items-center mt-4">
@@ -37,7 +43,7 @@ const ButtonsList = () => {
           {suggestionsList.map((suggestion) => (
             <button
               className="px-5 py-2 m-2 bg-gray-100 hover:bg-gray-200 rounded-full whitespace-nowrap text-gray-800 text-sm font-medium"
-              key={suggestion.id}
+              key={suggestion.id} onClick={() => handleSuggestionButtonClick(suggestion.id)}
             >
               {suggestion.snippet?.title}
             </button>
