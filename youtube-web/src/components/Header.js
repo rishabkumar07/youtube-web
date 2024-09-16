@@ -81,7 +81,7 @@ const Header = () => {
       {showSearchSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
         <ul>
           {searchSuggestions.map((suggestion) => (
-            <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100"
+            <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100 hover:cursor-pointer"
               onMouseDown={() => handleSuggestionClick(suggestion)}>
               {suggestion}
             </li>
