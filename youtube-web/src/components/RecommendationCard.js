@@ -9,7 +9,7 @@ const RecommendationCard = ({video}) => {
   const { duration } = video.contentDetails;
   
   return (
-    <Link to={`/watch?v=${video.id.videoId}`} className="flex mb-4 hover:bg-gray-100 p-2 rounded-md">
+    <Link to={`/watch?v=${video.id}`} className="flex mb-4 hover:bg-gray-100 p-2 rounded-md">
       <div className="relative w-1/3 mr-4">
       <img src={thumbnails.medium.url} alt={title} className="w-full h-full object-cover rounded-md" />
       <span className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-1 py-0.5 rounded"> {formatDuration(duration)} </span>

@@ -57,7 +57,7 @@ const RecommendationVideo = ({ videoTitle, videoId }) => {
           ))
         ):(
           recommendedVideos.map((video) => (
-            <RecommendationCard key={video.id.videoId} video={video} />
+            <RecommendationCard key={video.id} video={video} />
           ))
         )}
       </div>

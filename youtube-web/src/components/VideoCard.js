@@ -21,7 +21,7 @@ const VideoCard = ({videoDetails}) => {
         <img src={channelLogoUrl} alt="channel logo"  className="w-10 h-10 rounded-full mr-2"/>
         
         <div>
-          <p className="font-bold text-sm line-clamp-2">{title}</p>
+          <p className="font-bold text-sm line-clamp-2 hover:text-blue-500">{title}</p>
           <p className="text-xs text-gray-500">{channelTitle}</p>
           <p className="text-xs text-gray-500">{uploadedAgo}</p>
           <p className="text-xs text-gray-500">{formatViews(statistics?.viewCount)} views</p>
