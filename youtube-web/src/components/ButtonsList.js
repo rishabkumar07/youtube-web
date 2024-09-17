@@ -28,7 +28,7 @@ const ButtonsList = () => {
   return (
     <div className="flex items-center mt-4">
       <button
-        className="p-2 m-2 bg-gray-300 hover:bg-gray-400 rounded-full"
+        className="p-2 m-2 bg-gray-300 hover:bg-gray-400 rounded-full -mt-[40px]"
         onClick={scrollLeft}
       >
         &lt;
@@ -52,7 +52,7 @@ const ButtonsList = () => {
       </Scrollbar>
 
       <button
-        className="p-2 m-2 bg-gray-300 hover:bg-gray-400 rounded-full"
+        className="p-2 m-2 bg-gray-300 hover:bg-gray-400 rounded-full -mt-[40px]"
         onClick={scrollRight}
       >
         &gt;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { YT_SEARCH_API } from "./utils/constants";
+import { YT_SEARCH_API, YT_VIDEO_DETAILS_API } from "./utils/constants";
 import RecommendationCard from "./RecommendationCard";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -19,7 +19,17 @@ const RecommendationVideo = ({ videoTitle, videoId }) => {
       const json = await data.json();
       // Filter out the current video from the recommendations
       const filteredVideos = json.items.filter((video) => video.id.videoId !== videoId);
-      setRecommendedVideos(filteredVideos);
+      const videoIds = filteredVideos.map((video) => video.id.videoId).join(",");
+
+      const videoDetailsData = await fetch(`${YT_VIDEO_DETAILS_API}&id=${videoIds}`);
+      const videoDetailsJson = await videoDetailsData.json();
+
+      const recommendedVideosData = filteredVideos.map((video, index) => ({
+        ...video,
+        ...videoDetailsJson.items[index]
+      }));
+
+      setRecommendedVideos(recommendedVideosData);
     }
     catch (error)
     {
