@@ -72,22 +72,24 @@ const Header = () => {
       </div>
 
       <div className="col-span-9 px-10">
-      <input type="text" placeholder="Search" className="w-1/2 border border-gray-400 p-2 rounded-l-full"
-        value={searchQuery} onChange={(e) => setSearchQuery(e.target.value) }
-        onFocus={() => setShowSearchSuggestion(true) } 
-        onBlur={() => setShowSearchSuggestion(false) }></input>
-      <button className="border border-gray-400 px-5 py-2 rounded-r-full bg-gray-100"
-        onClick={() => handleSuggestionClick(searchQuery)}>🔍</button>
-      {showSearchSuggestion && (<div className="fixed bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
-        <ul>
-          {searchSuggestions.map((suggestion) => (
-            <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100 hover:cursor-pointer"
-              onMouseDown={() => handleSuggestionClick(suggestion)}>
-              {suggestion}
-            </li>
-          ))}
-        </ul>
-      </div> )}
+        <input type="text" placeholder="Search" className="w-1/2 border border-gray-400 p-2 rounded-l-full"
+          value={searchQuery} onChange={(e) => setSearchQuery(e.target.value) }
+          onFocus={() => setShowSearchSuggestion(true) } 
+          onBlur={() => setShowSearchSuggestion(false) }></input>
+        <button className="border border-gray-400 px-5 py-2 rounded-r-full bg-gray-100"
+          onClick={() => handleSuggestionClick(searchQuery)}>🔍</button>
+        {showSearchSuggestion && (
+          <div className="fixed bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100">
+            <ul>
+              {searchSuggestions.map((suggestion) => (
+                <li key={suggestion} className="py-2 px-3 shadow-sm hover:bg-gray-100 hover:cursor-pointer"
+                  onMouseDown={() => handleSuggestionClick(suggestion)}>
+                  {suggestion}
+                </li>
+              ))}
+            </ul>
+          </div> 
+        )}
       </div>
 
       <div className="col-span-1">
