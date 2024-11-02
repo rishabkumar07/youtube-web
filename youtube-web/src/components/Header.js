@@ -97,7 +97,7 @@ const Header = () => {
   }
 
   return (
-    <div className="grid grid-flow-col p-3 m-1 shadow-lg">
+    <div className="fixed top-0 left-0 w-full z-10 grid grid-flow-col p-3 shadow-lg bg-white">
       <div className="flex col-span-2">
         <IconButton onClick={handleSideBarMenu} >
           <MenuIcon />

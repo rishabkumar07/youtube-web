@@ -33,7 +33,7 @@ function App() {
   }])
 
   return (
-    <div className="App">
+    <div className="App pt-16">
       <Provider store={store}>
         <RouterProvider router={appRouter} />
       </Provider>
