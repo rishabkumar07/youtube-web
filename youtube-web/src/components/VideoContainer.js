@@ -169,11 +169,10 @@ const VideoContainer = () => {
         </div>
       ))}
       {videoList.length >= totalResults && (
-        <div className="bg-blue-100 text-blue-800 p-4 mb-4 rounded">
+        <div className="col-span-full flex justify-center items-center text-center w-full h-12 px-4 pt-2 my-0 text-base font-medium rounded-lg">
           No more videos available.
         </div>
       )}
-      {/* Observer element to trigger loading more videos */}
       <div ref={observerRef} className="h-10" />
     </div>
   )
