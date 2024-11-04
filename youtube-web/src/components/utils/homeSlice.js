@@ -14,11 +14,19 @@ const homeSlice = createSlice({
   },
   reducers: {
     addVideoList: (state, action) => {
-      state.popularVideoList = action.payload;
+      state.popularVideoList = state.popularVideoList.concat(action.payload.items);      
     },
     addOtherCategoryVideoList: (state, action) => {
-        state.otherCategoryVideoList.items = action.payload?.items;
+      if(state.otherCategoryVideoList.id === action.payload?.id)
+      {
+        state.otherCategoryVideoList.items = state.otherCategoryVideoList.items.concat(action.payload.items);
+      }
+      else
+      {
         state.otherCategoryVideoList.id = action.payload?.id;
+        state.otherCategoryVideoList.items = action.payload.items;
+      }
+
     },
     addVideoCategoryId: (state, action) => {
       state.videoCategoryId = action.payload;

@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect, useRef } from "react"; 
 import { YOUTUBE_POPULAR_VIDEOS_LIST_API, YT_CHANNEL_DETAILS } from "./utils/constants";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { addVideoList, addCurrentVideo, addOtherCategoryVideoList, addVideoCategoryId } from "./utils/homeSlice";
-import { useDispatch } from "react-redux";
 import VideoCard from "./VideoCard";
 import { Link } from "react-router-dom";
 import Skeleton from 'react-loading-skeleton';
@@ -14,9 +13,15 @@ const VideoContainer = () => {
   const otherCategoryVideoList =  useSelector((store) => store.home.otherCategoryVideoList);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [pageToken, setPageToken] = useState(null);
+  const [totalResults, setTotalResults] = useState(null);
+  const observerRef = useRef(null);
+
   const videoList = parseInt(videoCategoryId) === 0 ? popularVideoList : otherCategoryVideoList?.items || popularVideoList;
 
   useEffect(() => {
+    setPageToken(null);
+
     if (parseInt(videoCategoryId) === 0) 
     {
       if (popularVideoList.length === 0)
@@ -49,22 +54,27 @@ const VideoContainer = () => {
   }
 
   const getPopularVideos = async () => {
+    if (totalResults && popularVideoList.length >= totalResults) 
+      return;
     setLoading(true);
     try
     {
-      const data = await fetch(`${YOUTUBE_POPULAR_VIDEOS_LIST_API}&videoCategoryId=${videoCategoryId}`);
-      const jsonData = await data.json();
-      console.log(jsonData);
+      const data = await fetch(`${YOUTUBE_POPULAR_VIDEOS_LIST_API}&videoCategoryId=${videoCategoryId}&pageToken=${pageToken || ''}`);
+      const jsonData = await data.json();  
+      setTotalResults(jsonData.pageInfo?.totalResults);  
+      setPageToken(jsonData.nextPageToken || null);
 
       const channelIds = [...new Set(jsonData.items.map(video => video.snippet.channelId))];
       const channelDataMap = await getChannelDetails(channelIds);
     
-      const updatedList = jsonData.items.map((item) => ({
+      const updatedList = jsonData.items.filter(
+        (item) => !popularVideoList.some((video) => video.id === item.id)
+      ).map((item) => ({
         ...item,
         channelLogoUrl: channelDataMap[item.snippet.channelId] || '',
       }));
-
-      dispatch(addVideoList(updatedList));
+    
+      dispatch(addVideoList({items : updatedList}));
     }
     catch(error)
     {
@@ -77,17 +87,23 @@ const VideoContainer = () => {
   }
 
   const getOtherCategoryVideos = async () => {
+    if (totalResults && otherCategoryVideoList.id === videoCategoryId &&  otherCategoryVideoList.items.length >= totalResults) 
+      return;
     setLoading(true);
     try
     {
-      const data = await fetch(`${YOUTUBE_POPULAR_VIDEOS_LIST_API}&videoCategoryId=${videoCategoryId}`);
+      const data = await fetch(`${YOUTUBE_POPULAR_VIDEOS_LIST_API}&videoCategoryId=${videoCategoryId}&pageToken=${pageToken || ''}`);
       const jsonData = await data.json();
-      console.log(jsonData);
+
+      setTotalResults(jsonData.pageInfo?.totalResults);
+      setPageToken(jsonData.nextPageToken || null);
 
       const channelIds = [...new Set(jsonData.items.map(video => video.snippet.channelId))];
       const channelDataMap = await getChannelDetails(channelIds);
     
-      const updatedList = jsonData.items.map((item) => ({
+      const updatedList = jsonData.items.filter(
+        (item) => !otherCategoryVideoList.items.some((video) => video.id === item.id)
+      ).map((item) => ({
         ...item,
         channelLogoUrl: channelDataMap[item.snippet.channelId] || '',
       }));
@@ -113,27 +129,52 @@ const VideoContainer = () => {
     dispatch(addCurrentVideo(video));
   }
 
+  useEffect(()=> {
+    const observer = new IntersectionObserver((entries) => 
+    {
+      if(entries[0].isIntersecting && !loading)
+      {
+        if(parseInt(videoCategoryId) === 0)
+          getPopularVideos();
+        else
+          getOtherCategoryVideos();
+      }
+    }, {threshold: 1.0});
+
+    if(observerRef.current)
+      observer.observe(observerRef.current);
+
+    return () => 
+    {
+      if(observerRef.current)
+        observer.unobserve(observerRef.current);
+    }
+  }, [loading, videoCategoryId]);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 p-4">
-      { loading ? (
-        Array.from({length : 16 }).map((_, index) => (
-          <div key={index} className="p-2 shadow-lg">
-            <Skeleton height={180} className="rounded-lg" />
-            <div className="mt-2">
-              <Skeleton height={20} width="80%" />
-              <Skeleton height={15} width="60%" className="mt-2" />
-              <Skeleton height={15} width="40%" className="mt-2" />
-            </div>
+      {videoList.map((video) => (
+        <Link to={"/watch?v="+video.id} key={video.id} onClick={() => addVideoDetails(video)}>
+          <VideoCard videoDetails={video} />
+        </Link>
+      ))}
+      {loading && Array.from({ length: 6 }).map((_, index) => (
+        <div key={index} className="p-2 shadow-lg">
+          <Skeleton height={180} className="rounded-lg" />
+          <div className="mt-2">
+            <Skeleton height={20} width="80%" />
+            <Skeleton height={15} width="60%" className="mt-2" />
+            <Skeleton height={15} width="40%" className="mt-2" />
           </div>
-        ))
-      ) : (
-        videoList.map((video) => (
-          <Link to={"/watch?v="+video.id} key={video.id} onClick={() => addVideoDetails(video)}>
-            <VideoCard key={video?.id} videoDetails = {video} />
-          </Link>
-        ))
-      )
-      }
+        </div>
+      ))}
+      {videoList.length >= totalResults && (
+        <div className="bg-blue-100 text-blue-800 p-4 mb-4 rounded">
+          No more videos available.
+        </div>
+      )}
+      {/* Observer element to trigger loading more videos */}
+      <div ref={observerRef} className="h-10" />
     </div>
   )
 };
