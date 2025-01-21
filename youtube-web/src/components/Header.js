@@ -139,7 +139,7 @@ const Header = () => {
         <IconButton sx= {{
           border: "1px solid",
           borderColor: "grey.400",
-          height: "42px",
+          height: "41px",
           width: "54px",
           mt: "-6px",
           borderTopRightRadius: "9999px",

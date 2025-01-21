@@ -6,8 +6,17 @@ const Body = () => {
   const isSideBarMenuOpen = useSelector((store) => store.app.isSideBarMenuOpen);
   return (
     <div className="flex">
-      {isSideBarMenuOpen && <SideBar />}
-      <div className={`${isSideBarMenuOpen ? "w-[calc(100%-12rem)]" : "w-full"} transition-all duration-300`}>
+      {isSideBarMenuOpen && (
+        <div className="fixed top-65px left-0 h-[calc(100vh-65px)] overflow-y-auto w-44 overflow-x-hidden">
+          <SideBar />
+        </div>
+      )}
+      <div 
+        className="transition-all duration-300"
+        style={{
+          width: isSideBarMenuOpen ? `calc(100% - 12rem)` : "100%",
+          marginLeft: isSideBarMenuOpen ? "12rem" : ""
+        }}>
         <Outlet />
       </div>  
     </div>
