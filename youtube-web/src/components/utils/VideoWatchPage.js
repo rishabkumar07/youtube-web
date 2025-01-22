@@ -5,34 +5,55 @@ import { useSearchParams } from "react-router-dom";
 import LiveChat from "../LiveChat";
 import CommentsContainer from "../CommentsContainer";
 import RecommendationVideo from "../RecommendationVideo";
-import { YT_VIDEO_DETAILS_API } from "./constants";
-import { addCurrentVideo } from "./homeSlice";
+import VideoDetails from "../VideoDetails";
+import { YT_VIDEO_DETAILS_API, YT_CHANNEL_DETAILS } from "./constants";
+import { addCurrentVideo, addCurrentChannel } from "./homeSlice";
 
 const VideoWatchPage = () => {
   const dispatch = useDispatch();
   const videoDetails = useSelector((store) => store.home?.currentVideoDetails);
+  const channelDetails = useSelector((store) => store.home?.currentChannelDetails);
   const [searchParams] = useSearchParams();
   const videoKey = searchParams.get("v");
 
   useEffect(() => {
-    if (!videoDetails || videoDetails.id !== videoKey)
-      fetchVideoDetails();
-
+    fetchData();
     dispatch(closeSideBarMenu());
-  }, [videoKey]);
+  }, [videoKey, videoDetails, channelDetails]);
 
-  const fetchVideoDetails = async() => {
-    const data = await fetch(`${YT_VIDEO_DETAILS_API}&id=${videoKey}`);
-    const json = await data.json();
-    if (json.items && json.items.length > 0)
-      dispatch(addCurrentVideo(json.items[0]));
-  }
+  const fetchData = async () => {
+    try {
+      let fetchedVideoDetails = videoDetails;
 
-  const {snippet, statistics} = videoDetails || {};
-  const {channelTitle, title, thumbnails} = snippet || {};
+      if (!videoDetails || videoDetails.id !== videoKey) {
+        const videoResponse = await fetch(`${YT_VIDEO_DETAILS_API}&id=${videoKey}`);
+        const videoJson = await videoResponse.json();
+
+        if (videoJson.items && videoJson.items.length > 0) {
+          fetchedVideoDetails = videoJson.items[0];
+          dispatch(addCurrentVideo(fetchedVideoDetails));
+        }
+      }
+
+      const channelId = fetchedVideoDetails?.snippet?.channelId;
+      if (channelId && (!channelDetails || channelDetails.id !== channelId)) {
+        const channelResponse = await fetch(`${YT_CHANNEL_DETAILS}&id=${channelId}`);
+        const channelJson = await channelResponse.json();
+
+        if (channelJson.items && channelJson.items.length > 0) {
+          dispatch(addCurrentChannel(channelJson.items[0]));
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching video or channel details:", error);
+    }
+  };
+
+  const { snippet } = videoDetails || {};
+  const { title } = snippet || {};
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full mt-[3%] mx-[4%]">
       <div className="flex flex-row w-full">
         <div className="flex-1">
           <iframe
@@ -44,6 +65,14 @@ const VideoWatchPage = () => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; autoplay"
             allowFullScreen>
           </iframe>
+          <div className="videoTitle w-full  line-clamp-2 text-xl font-medium mt-3 ">
+            {videoDetails?.snippet?.title}
+          </div>
+          {channelDetails && channelDetails.id ? (
+            <VideoDetails channelDetails={channelDetails} videoDetails={videoDetails} />
+          ) : (
+            <div>Loading channel details...</div>
+          )}
           <CommentsContainer key={videoKey} videoId = {videoKey}/>
         </div>
 

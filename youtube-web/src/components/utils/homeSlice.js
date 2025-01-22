@@ -10,7 +10,8 @@ const homeSlice = createSlice({
       id : 0,
       items : []
     },
-    currentVideoDetails : []
+    currentVideoDetails : [],
+    currentChannelDetails : []
   },
   reducers: {
     addVideoList: (state, action) => {
@@ -33,9 +34,12 @@ const homeSlice = createSlice({
     },
     addCurrentVideo : (state, action) => {
       state.currentVideoDetails = action.payload;
+    },
+    addCurrentChannel: (state, action) => {
+      state.currentChannelDetails = action.payload;
     }
   }
 });
 
-export const { addVideoList, addCurrentVideo, addVideoCategoryId, addOtherCategoryVideoList } = homeSlice.actions;
+export const { addVideoList, addCurrentVideo, addCurrentChannel ,addVideoCategoryId, addOtherCategoryVideoList } = homeSlice.actions;
 export default homeSlice.reducer;

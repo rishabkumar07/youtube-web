@@ -8,7 +8,7 @@ export const YT_SEARCH_API = "https://youtube.googleapis.com/youtube/v3/search?p
 
 export const YT_VIDEO_DETAILS_API = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&key=" + process.env.REACT_APP_GOOGLE_API_KEY;
 
-export const YT_CHANNEL_DETAILS = "https://youtube.googleapis.com/youtube/v3/channels?part=snippet&key=" + process.env.REACT_APP_GOOGLE_API_KEY;
+export const YT_CHANNEL_DETAILS = "https://youtube.googleapis.com/youtube/v3/channels?part=snippet,statistics&key=" + process.env.REACT_APP_GOOGLE_API_KEY;
 
 export const SUGGESTIONS_LIST = {
   "items": [
