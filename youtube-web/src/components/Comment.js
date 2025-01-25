@@ -1,48 +1,128 @@
-import CommentReplies from "./CommentReplies";
 import { useState } from "react";
+import moment from "moment";
 import parse from 'html-react-parser';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import { Avatar } from "@mui/material";
+import LikeIcon from "../assets/icons/svgs/LikeIcon";
+import DislikeIcon from "../assets/icons/svgs/DislikeIcon";
+import DownTriangleIcon from "../assets/icons/svgs/DownTriangleIcon";
+import { formatViews } from "./utils/helperMethods";
 
-const Comment = ({data}) => {
-  const { authorDisplayName, authorProfileImageUrl, textDisplay, likeCount, publishedAt } = data?.snippet?.topLevelComment?.snippet;
-  const [showCommentReplies, setShowCommentReplies] = useState(false);
-
-  const toggleReplies = () => {
-    setShowCommentReplies(!showCommentReplies);
-  }
+const Comment = ({comment, totalReplies, snippet}) => {
+  const [showReplies, setShowReplies] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   return (
-    <div className="flex flex-col items-start p-4 border-b border-gray-200 bg-white">
-      <div className="flex items-start space-x-4 w-full">
-        <img  className="w-10 h-10 rounded-full" src={authorProfileImageUrl} alt="profile" />
-        
-        <div className="w-full">
-          <div className="flex justify-between">
-            <div className="text-sm font-semibold text-gray-800">{authorDisplayName || <Skeleton width={120} />}</div>
-            <div className="text-sm text-gray-600 mb-2">{publishedAt ? new Date(publishedAt).toLocaleDateString() : <Skeleton width={80} />}</div>
+    <div className="w-full flex justify-between my-3">
+      <div className="userProfileContainer w-[10%] md:w-[8%]">
+        <Avatar className="w-10 rounded-full"
+          src={snippet?.authorProfileImageUrl}
+          alt="channelImg"
+        />
+      </div>
+      
+      <div className="commentsContainer  w-[88%]   md:w-[92%]">
+        <div className="heading flex items-center gap-2 h-5">
+          <div className="userName text-sm font-medium ">
+            {snippet?.authorDisplayName}
           </div>
-          <div className="text-sm text-gray-900 mt-2">{textDisplay ? parse(textDisplay) : <Skeleton count={3} />}</div>
-          <div className="mt-2 flex items-center space-x-2 text-sm text-gray-600">
-            <span className="text-gray-600 text-lg">👍</span>
-            <span>{likeCount}</span>
+          <div
+            className={`daysago text-[#565555] text-xs font-medium`}>
+            {moment(snippet?.publishedAt).fromNow()}
           </div>
         </div>
-      </div>
-        {data.replies && (
-          <div className="w-full mt-2 ml-2">
-            <button className="text-blue-500 mt-2" onClick={() => toggleReplies()}>
-              { showCommentReplies ? '▲ Hide replies' : '▼ Show replies' }
-            </button>
-            { showCommentReplies && (
-              <div className="mt-2 pl-4 border-l border-gray-300 bg-gray-50">
-                <CommentReplies replies={data.replies.comments} />
-              </div>
-            )}
+
+        <div className="comment w-full my-2">
+          <div
+            className={`text-sm font-sans ${
+              showMore ? "" : snippet?.textOriginal.length > 250
+                ? "line-clamp-4" : "" } 
+              whitespace-pre-wrap break-words`}>
+            {parse(snippet?.textOriginal || "")}
           </div>
+          {snippet?.textOriginal.length > 250 ? (
+            <>
+              {showMore ? (
+                <div
+                onClick={() => setShowMore(false)}
+                className={`daysago my-2 cursor-pointer text-[#565555]
+                  text-xs font-medium`}>
+                Read less
+                </div>
+              ) : (
+                <div
+                  onClick={() => setShowMore(true)}
+                  className={`daysago my-2 cursor-pointer text-[#565555]
+                    text-xs font-medium`}>
+                  Read more
+                </div>
+              )}
+            </>
+          ) : (
+            ""
+          )}
+        </div>
+
+        <div className="commentStatistics flex gap-4 items-center h-8 ">
+          <div className="likes flex  items-center">
+            <div
+              className= {`hover:bg-[#e9e7e7]  md:active:bg-[#e5e3e3]
+                  cursor-pointer rounded-full -ml-1 p-1  flex justify-center items-center`}>
+              <LikeIcon color={ "#000"} />
+            </div>
+            <div
+              className={`count  text-[#565555]
+                text-xs mx-1 font-medium`}>
+              {formatViews(snippet?.likeCount)}
+            </div>
+            <div
+              className={`hover:bg-[#e9e7e7]  md:active:bg-[#e5e3e3]
+                cursor-pointer rounded-full  p-1   flex justify-center items-center`}>
+              <DislikeIcon color={"#000"} />
+            </div>
+            <div
+              className={`hover:bg-[#e9e7e7]  md:active:bg-[#e5e3e3]
+                cursor-pointer rounded-full  py-2 px-3 h-8 flex 
+                justify-center items-center`}>
+              <span className="text-sm font-medium">Reply</span>
+            </div>
+          </div>
+        </div>
+        {totalReplies > 0 ? (
+          <>
+            <div 
+              onClick={() => setShowReplies(!showReplies)}
+              className={`reply w-fit h-9 flex items-center pl-[8px] 
+                pr-[12px] py-[5px] rounded-full cursor-pointer
+              md:active:bg-blue-200 md:hover:bg-blue-100 
+                transition-colors ease`}>
+              <div
+                className={`icon ${showReplies ? "rotate-180" : "rotate-0"}`}>
+                <DownTriangleIcon color={"#065fd4"} />
+              </div>
+              <div
+                className={`text-[#065fd4] text-sm font-semibold whitespace-nowrap`}>
+                {formatViews(totalReplies) + " reply"}
+              </div>
+            </div>
+            {showReplies
+              ? comment?.replies?.comments.map((comment) => {
+                  return (
+                    <Comment
+                      key={comment.id}
+                      comment={comment}
+                      snippet={comment.snippet}
+                    />
+                  );
+                }
+              ) : ""
+            }
+          </>
+        ) : (
+          ""
         )}
-    </div>   
-  )
+      </div>
+    </div>
+  );
 };
 
 export default Comment;

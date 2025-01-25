@@ -4,7 +4,7 @@ import Comment from "./Comment";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-const CommentsContainer = ({videoId}) => {
+const CommentsContainer = ({videoId, commentCount}) => {
   const [comments, setComments] = useState([]);
   const [nextPageToken, setNextPageToken] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -37,41 +37,73 @@ const CommentsContainer = ({videoId}) => {
     }
   }
 
-
   return (
-    <div className="mt-4 p-4 bg-white rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4">Comments</h2>
-
-      <div>
-        {loading ? (
-          Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="mb-6">
-              <Skeleton height={60} />
-              <Skeleton count={3} />
+    <>
+      {comments ? (
+        commentCount === "0" ? (
+          <div className="commentsContainer w-full mt-2">
+            <div className="w-full flex justify-start items-center gap font-medium my-5">
+              No comments yet
             </div>
-          ))
+          </div>
         ) : (
-          comments.map((comment) => (
-            <div key={comment.id} className="mb-6">
-              <Comment data={comment} />
+          loading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="mb-6">
+                <Skeleton height={60} />
+                <Skeleton count={3} />
+              </div>
+            ))
+          ) : (
+            <div className="commentsContainer w-full mt-2">
+              <div className="w-full flex items-center gap-7 font-medium my-5">
+                <div className="totalComments">
+                  {Number(commentCount).toLocaleString("en-us") + " Comments"}
+                </div>
+              </div>
+  
+              <div className="comments w-full">
+                {comments?.map((comment) => (
+                  <Comment
+                    key={comment?.id}
+                    comment={comment}
+                    snippet={comment?.snippet?.topLevelComment?.snippet}
+                    totalReplies={comment?.snippet?.totalReplyCount} />
+                ))}
+              </div>
+  
+              {nextPageToken ? (
+                <button
+                  className={`whitespace-nowrap  text-center w-[50%] max-w-[200px] h-9 p-4 my-4 text-base font-medium flex justify-center items-center m-auto rounded-full
+                    ${
+                    isFetchingMore
+                      ? "bg-slate-300 text-white cursor-not-allowed"
+                      : "bg-white hover:bg-[#f2f2f2] active:bg-[#e5e3e3] text-[#0f0f0f] border border-[#ccc]"
+                    }`
+                  }
+                  onClick={() => fetchComments(nextPageToken, true)}
+                  disabled={isFetchingMore}>
+                  {isFetchingMore ? "Loading..." : "Show More Comments"}
+                </button>
+              ) : (
+                <div
+                  className="chatContainer whitespace-nowrap text-center max-w-[200px] w-full h-9 p-4 my-4 text-base font-medium flex justify-center items-center m-auto rounded-full cursor-pointer">
+                  No more comments
+                </div>
+              )}
             </div>
-          ))
-        )}
-      </div>
-
-      { nextPageToken && (
-        <button
-          className={`mt-4 px-4 py-2 rounded ${isFetchingMore
-              ? 'bg-blue-300 text-white cursor-not-allowed'
-              : 'bg-blue-500 text-white hover:bg-blue-600'
-          }`}
-          onClick={() => fetchComments(nextPageToken, true)}
-          disabled={isFetchingMore}>
-          {isFetchingMore ? 'Loading more comments...' : 'Load More Comments'}
-        </button>
+          )
+        )
+      ) : (
+        <div className="commentsContainer w-full mt-2">
+          <div className="w-full flex justify-center text-sm items-center gap font-medium my-5">
+            Comments are turned off.
+            <div className="cursor-pointer text-[#065fd4] text-sm">&nbsp; Learn more.</div>
+          </div>
+        </div>
       )}
-    </div>
-  )
+    </>
+  );
 };
 
 export default CommentsContainer;

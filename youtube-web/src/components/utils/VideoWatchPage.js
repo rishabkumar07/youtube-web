@@ -73,7 +73,7 @@ const VideoWatchPage = () => {
           ) : (
             <div>Loading channel details...</div>
           )}
-          <CommentsContainer key={videoKey} videoId = {videoKey}/>
+          <CommentsContainer key={videoKey} videoId = {videoKey} commentCount = {videoDetails?.statistics?.commentCount} />
         </div>
 
         <div className="flex flex-col w-1/3 ml-4">

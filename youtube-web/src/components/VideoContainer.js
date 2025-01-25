@@ -153,8 +153,8 @@ const VideoContainer = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 p-4">
-      {videoList.map((video) => (
-        <Link to={"/watch?v="+video.id} key={video.id} onClick={() => addVideoDetails(video)}>
+      {videoList.map((video, index) => (
+        <Link to={"/watch?v="+video.id} key={`${video.id}-${index}`} onClick={() => addVideoDetails(video)}>
           <VideoCard videoDetails={video} />
         </Link>
       ))}
