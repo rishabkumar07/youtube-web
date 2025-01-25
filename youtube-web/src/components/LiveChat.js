@@ -36,12 +36,12 @@ const LiveChat = () => {
 
   return (
     <>
-      <div className="w-full p-2 text-center bg-gray-200 cursor-pointer rounded-full" onClick={toggleChatContainer}>
+      <div className="w-full p-2 mt[-4px] text-center bg-gray-200 cursor-pointer rounded-full" onClick={toggleChatContainer}>
         {isLiveChatVisible ? "Hide live chat demo" : "Show live chat demo"}
       </div>
       {
         isLiveChatVisible && (
-          <div className="w-full h-[552px] p-2 border border-gray-300 bg-white rounded-lg overflow-y-scroll mt-2">
+          <div className="w-full h-[390px] p-2 border border-gray-300 bg-white rounded-lg overflow-y-scroll mt-2">
             <div className="flex flex-col-reverse space-y-2 space-y-reverse">
               {chatMessages.map((chatMessage, index) => (
                 <ChatMessage  key={index+chatMessage.name} name={chatMessage.name} message= {chatMessage.message} />

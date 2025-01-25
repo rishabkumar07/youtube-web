@@ -22,7 +22,7 @@ const SideBar = () => {
   if(!isSideBarMenuOpen)
     return;
   return (
-    <div className="p-5 shadow-lg w-48 bg-white h-full">
+    <div className="p-5 w-48 bg-white h-full">
       <ul className="space-y-4 pt-4">
         <li className="flex items-center space-x-2"> 
           <HomeIcon />

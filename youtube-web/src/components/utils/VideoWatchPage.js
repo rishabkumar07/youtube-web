@@ -53,18 +53,20 @@ const VideoWatchPage = () => {
   const { title } = snippet || {};
 
   return (
-    <div className="flex w-full mt-[3%] mx-[4%]">
-      <div className="flex flex-row w-full">
-        <div className="flex-1">
-          <iframe
-            width="100%"
-            height="600"
-            src={`https://www.youtube-nocookie.com/embed/${videoKey}?autoplay=1&mute=1`}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; autoplay"
-            allowFullScreen>
-          </iframe>
+    <div className="watchPage flex w-full min-h-screen pt-20 bg-white text-black">
+      <div className="leftContainer w-8/12 2xl:w-9/12 flex justify-end">
+        <div className="left w-[87%] xl:w-[91%] 2xl:w-[92.5%]  mr-8">
+          <div className="videoContainer w-full h-[30.05vw] xl:h-[31.77vw] 2xl:h-[33.5vw]">
+            <iframe
+              className="w-full h-full rounded-xl shadow-[-5px_2px_66px_7px_#e2e8f020]"
+              src={`https://www.youtube-nocookie.com/embed/${videoKey}?autoplay=1&mute=1&showinfo=0&rel=0`}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; autoplay"
+              allowFullScreen>
+            </iframe>
+          </div>
+          
           <div className="videoTitle w-full  line-clamp-2 text-xl font-medium mt-3 ">
             {videoDetails?.snippet?.title}
           </div>
@@ -75,15 +77,20 @@ const VideoWatchPage = () => {
           )}
           <CommentsContainer key={videoKey} videoId = {videoKey} commentCount = {videoDetails?.statistics?.commentCount} />
         </div>
+      </div>
 
-        <div className="flex flex-col w-1/3 ml-4">
+      <div className="rightContainer w-4/12 2xl:w-[3/12] flex justify-start">
+        <div className="right w-full max-w-[402px]">
           <LiveChat />
-          { title ? (
-            <RecommendationVideo key={videoKey} videoTitle={title} videoId={videoKey} /> )  : ( 
-            <div>Loading recommendations...</div>
-          )}
+          <div className="recommendationVideosContainer w-full mt-6 ">
+            { title ? (
+              <RecommendationVideo key={videoKey} videoTitle={title} videoId={videoKey} /> )  : ( 
+              <div>Loading recommendations...</div>
+            )}
+          </div>
         </div>
       </div>
+
     </div>
   )
 };
