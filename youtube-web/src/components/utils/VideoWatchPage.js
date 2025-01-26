@@ -53,7 +53,7 @@ const VideoWatchPage = () => {
   const { title } = snippet || {};
 
   return (
-    <div className="watchPage flex w-full min-h-screen pt-20 bg-white text-black">
+    <div className="watchPage flex w-full min-h-screen pt-[3rem] bg-white text-black">
       <div className="leftContainer w-8/12 2xl:w-9/12 flex justify-end">
         <div className="left w-[87%] xl:w-[91%] 2xl:w-[92.5%]  mr-8">
           <div className="videoContainer w-full h-[30.05vw] xl:h-[31.77vw] 2xl:h-[33.5vw]">

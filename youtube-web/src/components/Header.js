@@ -5,6 +5,7 @@ import { SEARCH_SUGGESTION_API } from "./utils/constants";
 import { addToSearchResultsCache } from "./utils/searchSlice";
 import SearchResultsPage from "./SearchResultsPage";
 import { useNavigate } from "react-router-dom";
+import { LinkedInProfile } from "./utils/constants";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -99,7 +100,7 @@ const Header = () => {
   return (
     <div className="fixed top-0 left-0 w-full z-10 grid grid-flow-col p-3 shadow-lg bg-white">
       <div className="flex col-span-2">
-        <IconButton onClick={handleSideBarMenu} >
+        <IconButton onClick={handleSideBarMenu} className="!py-[8px] !px-[14px]">
           <MenuIcon />
         </IconButton>
         <a href="/" className="p-2.5">
@@ -202,11 +203,13 @@ const Header = () => {
       </div>
 
       <div className="col-span-1">
-        <IconButton>
-          <Avatar sx={{ bgcolor: green[800] }} alt="Rishab Gupta" src="/broken-image.jpg">
-            R
-          </Avatar>
-        </IconButton>
+        <a href={LinkedInProfile} target="_blank" rel="noopener noreferrer">
+          <IconButton>
+            <Avatar sx={{ bgcolor: green[800] }} alt="Rishab Gupta" src="/broken-image.jpg">
+              R
+            </Avatar>
+          </IconButton>
+        </a>
       </div>
     </div>
   )

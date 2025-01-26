@@ -10,6 +10,8 @@ export const YT_VIDEO_DETAILS_API = "https://youtube.googleapis.com/youtube/v3/v
 
 export const YT_CHANNEL_DETAILS = "https://youtube.googleapis.com/youtube/v3/channels?part=snippet,statistics&key=" + process.env.REACT_APP_GOOGLE_API_KEY;
 
+export const LinkedInProfile = "https://www.linkedin.com/in/rishab-gupta-9b0972178/";
+
 export const SUGGESTIONS_LIST = {
   "items": [
     {

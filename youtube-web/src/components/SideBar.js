@@ -24,7 +24,7 @@ const SideBar = () => {
   return (
     <div className="p-5 w-48 bg-white h-full">
       <ul className="space-y-4 pt-4">
-        <li className="flex items-center space-x-2"> 
+        <li className="flex items-center space-x-2 py-2 -ml-5 pl-5 cursor-pointer hover:bg-gray-100 transition duration-200 ease-in-out"> 
           <HomeIcon />
           <Link to="/">Home</Link>
         </li>

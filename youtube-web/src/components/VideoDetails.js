@@ -1,3 +1,4 @@
+import { useState } from "react";
 import LikeIcon from "../assets/icons/svgs/LikeIcon";
 import DislikeIcon from "../assets/icons/svgs/DislikeIcon";
 import ShareIcon from "../assets/icons/svgs/ShareIcon";
@@ -5,6 +6,8 @@ import MoreSettingIcon from "../assets/icons/svgs/MoreSettingsIcon";
 import IconButton from "@mui/material/IconButton";
 import { formatViews } from "./utils/helperMethods";
 const VideoDetails = ({channelDetails, videoDetails}) => {
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
   return (
     <div className="channelInfo w-full h-14 flex justify-between items-center mt-2 ">
       <div className="left flex w-1/2  gap-5">
@@ -34,13 +37,12 @@ const VideoDetails = ({channelDetails, videoDetails}) => {
         </div>
         <div className=" flex items-center">
           <div
-            className={`subscribeBtn w-24 h-9  font-medium text-sm 
-              cursor-pointer  rounded-full flex items-center 
-              justify-center bg-black 
-              hover:bg-[#232323] active:bg-[#3f3f3f] text-white
+            className={`subscribeBtn w-24 h-9 font-medium text-sm cursor-pointer rounded-full flex items-center justify-center
+              ${isSubscribed ? "bg-[#0000000d] hover:bg-[#e9e7e7] active:bg-[#e5e3e3]" : "bg-black text-white hover:bg-[#232323] active:bg-[#3f3f3f]"}
             `}
+            onClick={() => setIsSubscribed(!isSubscribed)}
           >
-            Subscribe
+            {isSubscribed ? "Subscribed" : "Subscribe"}
           </div>
         </div>
       </div>

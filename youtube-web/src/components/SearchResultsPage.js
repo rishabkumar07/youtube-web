@@ -11,6 +11,7 @@ const SearchResultsPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [videoDetails, setVideoDetails] = useState([]);
   const [channelDetails, setChannelDetails] = useState({});
+  const [isHoverTitle, setIsHoverTitle] = useState({});
 
   useEffect(() => {
     if(query)
@@ -78,9 +79,17 @@ const SearchResultsPage = () => {
     }
   }
 
+  const handleMouseOver = (id) => {
+    setIsHoverTitle((prev) => ({ ...prev, [id]: true }));
+  };
+  
+  const handleMouseOut = (id) => {
+    setIsHoverTitle((prev) => ({ ...prev, [id]: false }));
+  };
+
   return (
     <div className="p-5">
-      {videoDetails.map((video) => {
+      {videoDetails.map((video, index) => {
         const { title, channelId, channelTitle, publishedAt } = video.snippet;
         const views = video.statistics.viewCount;
         const duration = video.contentDetails.duration;
@@ -89,8 +98,11 @@ const SearchResultsPage = () => {
 
         return (
         <Link to={`/watch?v=${video.id}`} key={video.id}>
-          <div className="flex items-start space-x-4 mb-6 hover:bg-gray-100 p-4 rounded-lg transition-colors">
-            
+          <div
+            onMouseOver={() => handleMouseOver(`${video.id}-${index}`)}
+            onMouseOut={() => handleMouseOut(`${video.id}-${index}`)}
+            className={`flex items-start space-x-4 mb-6 p-4 hover:bg-gray-100 rounded-lg transition-colors`}
+          >
             <div className="relative w-60 h-36 flex-shrink-0">
               <img src={video.snippet.thumbnails.medium.url}
                 alt={video.snippet.title}  className="w-full h-full object-cover rounded-lg" />
@@ -99,7 +111,11 @@ const SearchResultsPage = () => {
             </div>
 
             <div className="flex-grow">
-              <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 hover:text-blue-500"> {parse(title)} </h3>
+              <h3 
+              className={`text-lg font-semibold text-gray-900 line-clamp-2 
+                ${isHoverTitle[`${video.id}-${index}`] ? "text-blue-500" : ""}`}> 
+                  {parse(title)} 
+              </h3>
               
               <div className="flex items-center space-x-2 mt-2 text-gray-600">
                 { channelLogo && <img src={channelLogo} alt={channelTitle}  className="w-8 h-8 rounded-full" /> }
