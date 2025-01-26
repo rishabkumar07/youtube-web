@@ -7,6 +7,39 @@ import IconButton from "@mui/material/IconButton";
 import { formatViews } from "./utils/helperMethods";
 const VideoDetails = ({channelDetails, videoDetails}) => {
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisLiked, setIsDisliked] = useState(false);
+  const [likeCount, setLikeCount] = useState(videoDetails?.statistics?.likeCount || 0);
+
+  const handleLikeClicked = () => {
+    if (isDisLiked) {
+      setIsDisliked(false);
+      if (likeCount < 1000) {
+        setLikeCount(likeCount + 1);
+      }
+    }
+    setIsLiked(!isLiked);
+    if (!isLiked) {
+      if (likeCount < 1000) {
+        setLikeCount(likeCount + 1);
+      }
+    } 
+    else {
+      if (likeCount > 0) {
+        setLikeCount(likeCount - 1);
+      }
+    }
+  };
+  
+  const handleDislikeClicked = () => {
+    if (isLiked) {
+      setIsLiked(false);
+      if (likeCount > 0) {
+        setLikeCount(likeCount - 1);
+      }
+    }
+    setIsDisliked(!isDisLiked);
+  };
 
   return (
     <div className="channelInfo w-full h-14 flex justify-between items-center mt-2 ">
@@ -52,10 +85,10 @@ const VideoDetails = ({channelDetails, videoDetails}) => {
             className={`bg-[#0000000d] hover:bg-[#e9e7e7] active:bg-[#e5e3e3]
               cursor-pointer rounded-full rounded-r-none p-2   
               h-9 w-[88px] flex justify-center items-center`}>
-            <div className={"flex items-center justify-center"}>
-              <LikeIcon color={"#000"} />
+            <div className={"flex items-center justify-center"} onClick={handleLikeClicked}>
+              <LikeIcon fillColor={isLiked ? "#000" : "#fff"} strokeColor={isLiked ? "#fff" : "#000"} />
               <span className="text-sm font-medium ml-1">
-                {formatViews(videoDetails?.statistics?.likeCount)}
+                {formatViews(likeCount)}
               </span>
             </div>
           </div>
@@ -68,8 +101,9 @@ const VideoDetails = ({channelDetails, videoDetails}) => {
           </div>
           <div
             className={`bg-[#0000000d] hover:bg-[#e9e7e7]  active:bg-[#e5e3e3]
-              cursor-pointer rounded-full rounded-l-none p-2 h-9 w-[52px] flex justify-center items-center`}>
-            <DislikeIcon color={"#000"} />
+              cursor-pointer rounded-full rounded-l-none p-2 h-9 w-[52px] flex justify-center items-center`}
+            onClick={handleDislikeClicked}>
+            <DislikeIcon fillColor={isDisLiked ? "#000" : "#fff"} strokeColor={isDisLiked ? "#fff" : "#000"} />
           </div>
         </div>
         <div

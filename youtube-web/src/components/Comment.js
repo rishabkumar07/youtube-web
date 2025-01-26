@@ -10,6 +10,40 @@ import { formatViews } from "./utils/helperMethods";
 const Comment = ({comment, totalReplies, snippet}) => {
   const [showReplies, setShowReplies] = useState(false);
   const [showMore, setShowMore] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisLiked, setIsDisliked] = useState(false);
+  const [likeCount, setLikeCount] = useState(snippet?.likeCount || 0);
+
+  const handleLikeClicked = () => {
+    if (isDisLiked) {
+      setIsDisliked(false);
+      if (likeCount < 1000) {
+        setLikeCount(likeCount + 1);
+      }
+    }
+    setIsLiked(!isLiked);
+    if (!isLiked) {
+      if (likeCount < 1000) {
+        setLikeCount(likeCount + 1);
+      }
+    } 
+    else {
+      if (likeCount > 0) {
+        setLikeCount(likeCount - 1);
+      }
+    }
+  };
+  
+  const handleDislikeClicked = () => {
+    if (isLiked) {
+      setIsLiked(false);
+      if (likeCount > 0) {
+        setLikeCount(likeCount - 1);
+      }
+    }
+    setIsDisliked(!isDisLiked);
+  };
+  
 
   return (
     <div className="w-full flex justify-between my-3">
@@ -66,18 +100,20 @@ const Comment = ({comment, totalReplies, snippet}) => {
           <div className="likes flex  items-center">
             <div
               className= {`hover:bg-[#e9e7e7]  md:active:bg-[#e5e3e3]
-                  cursor-pointer rounded-full -ml-1 p-1  flex justify-center items-center`}>
-              <LikeIcon color={ "#000"} />
+                  cursor-pointer rounded-full -ml-1 p-1  flex justify-center items-center`}
+              onClick={handleLikeClicked}>
+              <LikeIcon fillColor={isLiked ? "#000" : "#fff"} strokeColor={isLiked ? "#fff" : "#000"} />
             </div>
             <div
               className={`count  text-[#565555]
                 text-xs mx-1 font-medium`}>
-              {formatViews(snippet?.likeCount)}
+              {formatViews(likeCount)}
             </div>
             <div
               className={`hover:bg-[#e9e7e7]  md:active:bg-[#e5e3e3]
-                cursor-pointer rounded-full  p-1   flex justify-center items-center`}>
-              <DislikeIcon color={"#000"} />
+                cursor-pointer rounded-full  p-1   flex justify-center items-center`}
+                onClick={handleDislikeClicked}>
+              <DislikeIcon fillColor={isDisLiked ? "#000" : "#fff"} strokeColor={isDisLiked ? "#fff" : "#000"} />
             </div>
             <div
               className={`hover:bg-[#e9e7e7]  md:active:bg-[#e5e3e3]
