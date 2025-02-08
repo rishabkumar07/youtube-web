@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
 import { SEARCH_SUGGESTION_API } from "./utils/constants";
 import { addToSearchResultsCache } from "./utils/searchSlice";
-import SearchResultsPage from "./SearchResultsPage";
 import { useNavigate } from "react-router-dom";
 import { LinkedInProfile } from "./utils/constants";
 import IconButton from "@mui/material/IconButton";

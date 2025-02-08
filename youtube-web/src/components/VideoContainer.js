@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"; 
 import { YOUTUBE_POPULAR_VIDEOS_LIST_API, YT_CHANNEL_DETAILS } from "./utils/constants";
 import { useSelector, useDispatch } from "react-redux";
-import { addVideoList, addCurrentVideo, addOtherCategoryVideoList, addVideoCategoryId } from "./utils/homeSlice";
+import { addVideoList, addCurrentVideo, addOtherCategoryVideoList } from "./utils/homeSlice";
 import VideoCard from "./VideoCard";
 import { Link } from "react-router-dom";
 import Skeleton from 'react-loading-skeleton';

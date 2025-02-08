@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import MovieIcon from '@mui/icons-material/Movie';
-import MusicIcon from '@mui/icons-material/MusicNote'
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SportsCricket from '@mui/icons-material/SportsCricket';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
